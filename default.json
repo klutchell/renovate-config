@@ -7,7 +7,7 @@
   "platform": "github",
   "onboarding": false,
   "requireConfig": false,
-  "repositories": ["klutchell/balena-syncthing"],
+  "repositories": ["klutchell/renovate-config", "klutchell/balena-syncthing"],
   "rebaseWhen": "auto",
   "automerge": false,
   "labels": ["renovate"]
