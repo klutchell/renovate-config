@@ -9,7 +9,12 @@
   "repositories": [
     "klutchell/renovate-config",
     "klutchell/balena-syncthing",
-    "klutchell/balena-nextcloud"
+    "klutchell/balena-nextcloud",
+    "klutchell/balena-homeassistant",
+    "klutchell/balena-pihole",
+    "klutchell/balena-wireguard",
+    "klutchell/balena-frigate",
+    "klutchell/balena-adguard"
   ],
   "rebaseWhen": "auto",
   "automerge": false,
