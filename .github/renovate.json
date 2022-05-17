@@ -15,6 +15,7 @@
     "klutchell/balena-wireguard",
     "klutchell/balena-frigate",
     "klutchell/balena-adguard",
+    "klutchell/balena-backup",
     "klutchell/mediaserver"
   ],
   "rebaseWhen": "auto",
