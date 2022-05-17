@@ -14,7 +14,8 @@
     "klutchell/balena-pihole",
     "klutchell/balena-wireguard",
     "klutchell/balena-frigate",
-    "klutchell/balena-adguard"
+    "klutchell/balena-adguard",
+    "klutchell/mediaserver"
   ],
   "rebaseWhen": "auto",
   "automerge": false,
