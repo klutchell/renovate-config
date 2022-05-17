@@ -1,13 +1,16 @@
 {
   "extends": ["config:base"],
   "branchPrefix": "gh-renovate/",
-  "dryRun": true,
   "allowPostUpgradeCommandTemplating": true,
   "allowedPostUpgradeCommands": ["^sed"],
   "platform": "github",
   "onboarding": false,
   "requireConfig": false,
-  "repositories": ["klutchell/renovate-config", "klutchell/balena-syncthing"],
+  "repositories": [
+    "klutchell/renovate-config",
+    "klutchell/balena-syncthing",
+    "klutchell/balena-nextcloud"
+  ],
   "rebaseWhen": "auto",
   "automerge": false,
   "labels": ["renovate"],
