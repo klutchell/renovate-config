@@ -24,7 +24,7 @@
     "klutchell/balena-backup",
     "klutchell/mediaserver"
   ],
-  "rebaseWhen": "auto",
+  "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": [
     "renovate"
