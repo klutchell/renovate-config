@@ -22,7 +22,8 @@
     "klutchell/balena-frigate",
     "klutchell/balena-adguard",
     "klutchell/balena-backup",
-    "klutchell/mediaserver"
+    "klutchell/mediaserver",
+    "klutchell/volume-keeper"
   ],
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
