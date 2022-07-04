@@ -23,7 +23,7 @@
     "klutchell/balena-adguard",
     "klutchell/balena-backup",
     "klutchell/mediaserver",
-    "klutchell/volume-keeper"
+    "klutchell/volume-keeper",
     "klutchell/balena-tailscale"
   ],
   "rebaseWhen": "behind-base-branch",
