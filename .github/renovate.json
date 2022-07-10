@@ -12,20 +12,7 @@
   "prHourlyLimit": 0,
   "onboarding": false,
   "requireConfig": false,
-  "repositories": [
-    "klutchell/renovate-config",
-    "klutchell/balena-syncthing",
-    "klutchell/balena-nextcloud",
-    "klutchell/balena-homeassistant",
-    "klutchell/balena-pihole",
-    "klutchell/balena-wireguard",
-    "klutchell/balena-frigate",
-    "klutchell/balena-adguard",
-    "klutchell/balena-backup",
-    "klutchell/mediaserver",
-    "klutchell/volume-keeper",
-    "klutchell/balena-tailscale"
-  ],
+  "autodiscover": true,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": [
