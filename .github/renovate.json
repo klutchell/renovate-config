@@ -18,5 +18,16 @@
   "labels": [
     "renovate"
   ],
-  "printConfig": true
+  "printConfig": true,
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "renovatebot/github-action"
+      ],
+      "matchBaseBranches": [
+        "main"
+      ],
+      "automerge": true
+    }
+  ]
 }
