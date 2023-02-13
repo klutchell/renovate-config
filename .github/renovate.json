@@ -26,7 +26,7 @@
         "(^|\\/)Dockerfile(\\.[[:alnum:]]+)?$"
       ],
       "matchStrings": [
-        "bh\\.cr/gh_klutchell/tailscale-%%BALENA_ARCH%%/(?<currentValue>.*?)\\n"
+        "bh\\.cr/klutchell_blocks/tailscale-%%BALENA_ARCH%%/(?<currentValue>.*?)\\n"
       ],
       "depNameTemplate": "klutchell/balena-tailscale",
       "datasourceTemplate": "github-tags",
