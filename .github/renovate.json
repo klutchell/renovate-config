@@ -15,6 +15,7 @@
   "autodiscover": true,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
+  "includeForks": true,
   "labels": [
     "renovate"
   ],
