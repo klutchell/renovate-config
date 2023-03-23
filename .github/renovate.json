@@ -1,13 +1,8 @@
 {
-  "extends": [
-    "config:base",
-    ":semanticCommitsDisabled"
-  ],
+  "extends": ["config:base", ":semanticCommitsDisabled"],
   "branchPrefix": "gh-renovate/",
   "allowPostUpgradeCommandTemplating": true,
-  "allowedPostUpgradeCommands": [
-    "^sed"
-  ],
+  "allowedPostUpgradeCommands": ["^sed"],
   "platform": "github",
   "prHourlyLimit": 0,
   "onboarding": false,
@@ -15,9 +10,7 @@
   "autodiscover": true,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
-  "labels": [
-    "renovate"
-  ],
+  "labels": ["renovate"],
   "printConfig": true,
   "regexManagers": [
     {
@@ -47,12 +40,12 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": [
-        "renovatebot/github-action"
-      ],
-      "matchBaseBranches": [
-        "main"
-      ],
+      "matchPackageNames": ["renovatebot/github-action"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch"],
       "automerge": true
     }
   ]
