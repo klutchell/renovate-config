@@ -23,7 +23,7 @@
       ],
       "depNameTemplate": "klutchell/balena-tailscale",
       "datasourceTemplate": "github-tags",
-      "extractVersionTemplate": "^v?(?<version>.*)(\\+rev[0-9]+)?$"
+      "extractVersionTemplate": "^v?(?<version>[^\\+]+)(\\+rev[0-9]+)?$"
     },
     {
       "fileMatch": [
@@ -35,7 +35,7 @@
       ],
       "depNameTemplate": "klutchell/balena-restic",
       "datasourceTemplate": "github-tags",
-      "extractVersionTemplate": "^v?(?<version>.*)(\\+rev[0-9]+)?$"
+      "extractVersionTemplate": "^v?(?<version>[^\\+]+)(\\+rev[0-9]+)?$"
     }
   ],
   "packageRules": [
