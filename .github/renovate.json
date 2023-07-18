@@ -1,5 +1,10 @@
 {
-  "extends": ["config:base", ":semanticCommitsDisabled"],
+  "extends": [
+    "config:base",
+    "config:recommended",
+    "config:best-practices",
+    ":semanticCommitsDisabled"
+  ],
   "branchPrefix": "gh-renovate/",
   "allowPostUpgradeCommandTemplating": true,
   "allowedPostUpgradeCommands": ["^sed"],
