@@ -6,7 +6,10 @@
     ":semanticCommitsDisabled",
     ":automergeStableNonMajor",
     ":automergePatch",
-    ":automergeDigest"
+    ":automergeDigest",
+    "regexManagers:dockerfileVersions",
+    "regexManagers:githubActionsVersions",
+    "regexManagers:tfvarsVersions"
   ],
   "pinDigest": {
     "automerge": true
