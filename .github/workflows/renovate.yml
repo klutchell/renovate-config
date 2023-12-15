@@ -14,7 +14,7 @@ jobs:
       - name: Enable dry-run
         run: echo "RENOVATE_DRY_RUN=full" >> $GITHUB_ENV
         if: github.event_name == 'pull_request'
-      - uses: renovatebot/github-action@b93d7e432be4d7ad29452a9a058aa130220e8819 # v39.2.2
+      - uses: renovatebot/github-action@b8ce565a2e98de1fec9696a76fba7beb01ec29b2 # v39.2.3
         with:
           configurationFile: default.json
           token: ${{ secrets.RENOVATE_TOKEN }}
