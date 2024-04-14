@@ -1,8 +1,8 @@
 name: Renovate
 on:
   schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron: '13 13 * * *'
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '10 13-14 * * 1-5'
   pull_request:
     branches:
       - main
