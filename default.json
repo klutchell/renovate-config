@@ -9,7 +9,8 @@
     ":automergeDigest",
     "regexManagers:dockerfileVersions",
     "regexManagers:githubActionsVersions",
-    "regexManagers:tfvarsVersions"
+    "regexManagers:tfvarsVersions",
+    "group:allDigest"
   ],
   "pinDigest": {
     "automerge": true
