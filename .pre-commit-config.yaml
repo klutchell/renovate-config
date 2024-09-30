@@ -19,4 +19,3 @@ repos:
     rev: v1.7.3
     hooks:
     -   id: actionlint-docker
-        args: ["-color", "-ignore", ":info:", "-ignore", ":style:"]
