@@ -22,6 +22,32 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
 
+      - name: Discover repositories
+        env:
+          # environment variables used by gh CLI
+          # https://cli.github.com/manual/gh_help_environment
+          GH_DEBUG: "true"
+          GH_PAGER: "cat"
+          GH_PROMPT_DISABLED: "true"
+          GH_REPO: "${{ github.repository }}"
+          # default to automatic actions token
+          GH_TOKEN: "${{ steps.app-token.outputs.token }}"
+        run: |
+          gh repo list --no-archived --json owner,name --jq '.[] | "\(.owner.login)/\(.name)"' > repos.txt
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /installation/repositories
+          echo "Discovered repositories:"
+          cat repos.txt
+
+      # Add discovered repositories to default.json repositories array with jq
+      - name: Prepare default.json
+        run: |
+          jq --rawfile repos repos.txt '.repositories = ($repos | split("\n") | map(select(length > 0)))' default.json > default.json.tmp
+          jq '.autodiscover = false' default.json.tmp > default.json
+          jq . default.json
+
       - name: Enable dry-run
         run: echo "RENOVATE_DRY_RUN=full" >> $GITHUB_ENV
         if: github.event_name == 'pull_request'

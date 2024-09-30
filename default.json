@@ -22,7 +22,7 @@
   "prHourlyLimit": 0,
   "onboarding": false,
   "requireConfig": "optional",
-  "autodiscover": false,
+  "autodiscover": true,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": ["renovate"],
@@ -67,15 +67,5 @@
       "matchCurrentVersion": "!/^v?0/",
       "automerge": true
     }
-  ],
-  "repositories": [
-    "klutchell/balena-adguard",
-    "klutchell/balena-homeassistant",
-    "klutchell/balena-mediaserver",
-    "klutchell/balena-nextcloud",
-    "klutchell/balena-pihole",
-    "klutchell/dnscrypt-proxy-docker",
-    "klutchell/renovate-config",
-    "klutchell/unbound-docker"
   ]
 }
