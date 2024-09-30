@@ -10,7 +10,8 @@
     "regexManagers:dockerfileVersions",
     "regexManagers:githubActionsVersions",
     "regexManagers:tfvarsVersions",
-    "group:allDigest"
+    "group:allDigest",
+    "schedule:earlyMondays"
   ],
   "pinDigest": {
     "automerge": true
