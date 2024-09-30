@@ -23,7 +23,7 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Enable dry-run
-        run: echo "RENOVATE_DRY_RUN=full" >> $GITHUB_ENV
+        run: echo "RENOVATE_DRY_RUN=full" >> "${GITHUB_ENV}"
         if: github.event_name == 'pull_request'
 
       - uses: renovatebot/github-action@a1ed1d0adddfdf138192d1fbe3150a80094dee6a # v40.3.1
