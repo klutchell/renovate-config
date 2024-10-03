@@ -11,8 +11,9 @@
     "regexManagers:githubActionsVersions",
     "regexManagers:tfvarsVersions",
     "group:allDigest",
-    "schedule:automergeEarlyMondays"
+    "schedule:earlyMondays"
   ],
+  "timezone": "America/New_York",
   "pinDigest": {
     "automerge": true
   },
