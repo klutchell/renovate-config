@@ -22,8 +22,8 @@ jobs:
         id: app-token
         with:
           app_id: ${{ vars.APP_ID }}
-          installation_retrieval_mode: user
-          installation_retrieval_payload: ${{ github.repository_owner }}
+          installation_retrieval_mode: id
+          installation_retrieval_payload: ${{ vars.INSTALLATION_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Enable dry-run
