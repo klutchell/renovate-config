@@ -2,9 +2,9 @@ name: Renovate
 on:
   workflow_dispatch:
   schedule:
+    # Runs every 30 minutes
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    # every 30min between 09:00 and 12:00 on Monday
-    - cron: "*/30 13-15 * * 1"
+    - cron: "*/30 * * * *"
   pull_request:
     branches:
       - main
