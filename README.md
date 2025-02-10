@@ -1,3 +1,2 @@
 # renovate-config
-
-Shared renovate configuration
+Shared renovate configuration and GitHub Action
