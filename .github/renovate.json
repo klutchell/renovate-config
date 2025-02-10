@@ -1,7 +1,0 @@
-{
-  "extends": [
-    "config:recommended",
-    "customManagers:dockerfileVersions",
-    "customManagers:githubActionsVersions"
-  ]
-}
