@@ -17,6 +17,10 @@
   "pinDigest": {
     "automerge": true
   },
+  "allowPostUpgradeCommandTemplating": true,
+  "allowedPostUpgradeCommands": [
+    "^sed"
+  ],
   "prHourlyLimit": 0,
   "onboarding": false,
   "requireConfig": "optional",
