@@ -70,7 +70,7 @@
         "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
       ],
       "matchStrings": [
-        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:]+))?:(?<currentValue>[^\\s]+)"
+        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentValue>[0-9\\.]+))?(@(?<currentDigest>\\w+:\\w+))?"
       ],
       "datasourceTemplate": "custom.balena-cloud"
     }
