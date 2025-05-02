@@ -45,8 +45,22 @@
     },
     {
       "matchDatasources": ["custom.balena-cloud"],
-      "groupName": "{{{replace '-armv7hf$' '' (replace '-amd64$' '' (replace '-aarch64$' '' depName))}}}",
       "automerge": false
+    },
+    {
+      "matchDatasources": ["custom.balena-cloud"],
+      "matchPackageNames": ["/\\-amd64$/"],
+      "groupName": "bh.cr/{{{replace '\\-amd64$' '' depName}}}"
+    },
+    {
+      "matchDatasources": ["custom.balena-cloud"],
+      "matchPackageNames": ["/\\-aarch64$/"],
+      "groupName": "bh.cr/{{{replace '\\-aarch64$' '' depName}}}"
+    },
+    {
+      "matchDatasources": ["custom.balena-cloud"],
+      "matchPackageNames": ["/\\-armv7hf$/"],
+      "groupName": "bh.cr/{{{replace '\\-armv7hf$' '' depName}}}"
     },
     {
       "matchManagers": ["dockerfile"],
@@ -70,7 +84,7 @@
         "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
       ],
       "matchStrings": [
-        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:]+))?:(?<currentValue>[^\\s]+)"
+        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentValue>[0-9\\.]+))?(@(?<currentDigest>\\w+:\\w+))?"
       ],
       "datasourceTemplate": "custom.balena-cloud"
     }
