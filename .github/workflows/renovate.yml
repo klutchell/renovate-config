@@ -1,6 +1,12 @@
 name: Renovate
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: false
+        description: "If true, the Renovate will not make any changes to the repository."
+        required: false
   schedule:
     # Runs every 30 minutes
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
@@ -35,7 +41,7 @@ jobs:
 
       - name: Enable dry-run
         run: echo "RENOVATE_DRY_RUN=full" >> "${GITHUB_ENV}"
-        if: github.event_name == 'pull_request'
+        if: inputs.dry_run || github.event_name == 'pull_request'
 
       # https://github.com/renovatebot/github-action
       - uses: renovatebot/github-action@8ac70de2fe55752c573155866e30735411e3b61c # v41.0.22
