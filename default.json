@@ -49,18 +49,9 @@
     },
     {
       "matchDatasources": ["custom.balena-cloud"],
-      "matchPackageNames": ["/\\-amd64$/"],
-      "groupName": "bh.cr/{{{replace '\\-amd64$' '' depName}}}"
-    },
-    {
-      "matchDatasources": ["custom.balena-cloud"],
-      "matchPackageNames": ["/\\-aarch64$/"],
-      "groupName": "bh.cr/{{{replace '\\-aarch64$' '' depName}}}"
-    },
-    {
-      "matchDatasources": ["custom.balena-cloud"],
-      "matchPackageNames": ["/\\-armv7hf$/"],
-      "groupName": "bh.cr/{{{replace '\\-armv7hf$' '' depName}}}"
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchPackageNames": ["gh_klutchell/tailscale-*"],
+      "groupName": "balena-tailscale"
     },
     {
       "matchManagers": ["dockerfile"],
