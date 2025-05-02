@@ -42,6 +42,16 @@
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^v?0/",
       "automerge": true
+    },
+    {
+      "matchDatasources": ["balena-cloud"],
+      "groupName": "{{{replace '-armv7hf$' '' (replace '-amd64$' '' (replace '-aarch64$' '' depName))}}}",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "matchPackageNames": ["bh.cr/**"],
+      "enabled": false
     }
   ],
   "customManagers": [
@@ -52,6 +62,25 @@
         "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s+version:\\s*[\"']?(?<currentVersion>.+?)[\"']?\\s"
       ],
       "currentValueTemplate": "{{{currentVersion}}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
+        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
+      ],
+      "matchStrings": [
+        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:]+))?:(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "custom.balena-cloud"
     }
-  ]
+  ],
+  "customDatasources": {
+    "balena-cloud": {
+      "defaultRegistryUrlTemplate": "https://api.balena-cloud.com/v7/release?$filter=(belongs_to__application/any(a:a/slug%20eq%20'{{packageName}}'))%20and%20status%20eq%20%27success%27%20and%20is_final%20eq%20true&$select=commit,is_finalized_at__date,raw_version",
+      "transformTemplates": [
+        "{ \"releases\": $map($.d, function($v) { return { \"version\": $v.raw_version, \"releaseTimestamp\": $v.is_finalized_at__date, \"digest\": $v.commit } }) }"
+      ]
+    }
+  }
 }
