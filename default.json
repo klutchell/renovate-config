@@ -44,7 +44,7 @@
       "automerge": true
     },
     {
-      "matchDatasources": ["balena-cloud"],
+      "matchDatasources": ["custom.balena-cloud"],
       "groupName": "{{{replace '-armv7hf$' '' (replace '-amd64$' '' (replace '-aarch64$' '' depName))}}}",
       "automerge": false
     },
