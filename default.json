@@ -75,7 +75,7 @@
         "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
       ],
       "matchStrings": [
-        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:@\\s]+))?(:(?<currentValue>[\\w\\+\\.]+))?"
+        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:@\\s]+))?(:(?<currentValue>[\\w\\-\\.]+))?"
       ],
       "datasourceTemplate": "custom.balena-cloud",
       "versioningTemplate": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\-rev(?<build>\\d+))?$"
