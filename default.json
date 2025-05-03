@@ -75,17 +75,17 @@
         "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
       ],
       "matchStrings": [
-        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:@\\s]+))?(:(?<currentValue>[^\\s]+))?"
+        "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)(/(?<currentDigest>[^:@\\s]+))?(:(?<currentValue>[\\w\\+\\.]+))?"
       ],
       "datasourceTemplate": "custom.balena-cloud",
-      "versioningTemplate": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\+rev(?<build>\\d+))?$"
+      "versioningTemplate": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\-rev(?<build>\\d+))?$"
     }
   ],
   "customDatasources": {
     "balena-cloud": {
       "defaultRegistryUrlTemplate": "https://api.balena-cloud.com/v7/release?$filter=(belongs_to__application/any(a:a/slug%20eq%20'{{packageName}}'))%20and%20status%20eq%20%27success%27%20and%20is_final%20eq%20true&$select=commit,is_finalized_at__date,raw_version",
       "transformTemplates": [
-        "{ \"releases\": $map($.d, function($v) { return { \"version\": $v.raw_version, \"releaseTimestamp\": $v.is_finalized_at__date, \"digest\": $v.commit } }) }"
+        "{ \"releases\": $map($.d, function($v) { return { \"version\": $replace($v.raw_version, \"\\+\", \"-\"), \"releaseTimestamp\": $v.is_finalized_at__date, \"digest\": $v.commit } }) }"
       ]
     }
   }
