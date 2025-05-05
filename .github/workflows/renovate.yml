@@ -18,7 +18,7 @@ on:
 env:
   LOG_LEVEL: debug
   # renovate: datasource=docker depName=renovate packageName=ghcr.io/renovatebot/renovate
-  RENOVATE_VERSION: 39.264.0-full
+  RENOVATE_VERSION: 40.3.4-full
 
 jobs:
   renovate:
