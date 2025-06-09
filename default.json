@@ -45,10 +45,6 @@
     },
     {
       "matchDatasources": ["custom.balena-cloud"],
-      "automerge": false
-    },
-    {
-      "matchDatasources": ["custom.balena-cloud"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "matchPackageNames": ["gh_klutchell/tailscale-*"],
       "groupName": "balena-tailscale"
