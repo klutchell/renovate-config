@@ -29,6 +29,9 @@
   "automerge": false,
   "labels": ["renovate"],
   "printConfig": true,
+  "pre-commit": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchPackageNames": ["renovatebot/github-action"],
