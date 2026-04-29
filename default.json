@@ -22,9 +22,6 @@
     "^sed"
   ],
   "prHourlyLimit": 0,
-  "onboarding": false,
-  "requireConfig": "optional",
-  "autodiscover": true,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": ["renovate"],
