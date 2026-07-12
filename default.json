@@ -56,6 +56,12 @@
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["bh.cr/**"],
       "enabled": false
+    },
+    {
+      "description": "Schedule pre-commit updates to 1h per day for noise reduction",
+      "matchManagers": ["pre-commit"],
+      "prPriority": -1,
+      "schedule": ["* 0 * * *"]
     }
   ],
   "customManagers": [
