@@ -1,97 +1,117 @@
+---
 name: Renovate
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       dry_run:
         type: boolean
         default: false
         description: "If true, the Renovate will not make any changes to the repository."
         required: false
-  schedule:
-    # Runs every 30 minutes
-    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    - cron: "*/30 * * * *"
-  pull_request:
-    branches:
-      - main
+      environment:
+        type: string
+        required: false
+        description: "The environment to run Renovate for."
+      config_file:
+        type: string
+        required: true
+        description: "The config file to use for Renovate."
+      repositories:
+        type: string
+        required: false
+        description: "Comma-separated repos for Renovate to process. Leave empty to use the config file's repositories."
+
+permissions:
+  contents: read
+  packages: read   # Manage private ghcr.io dependencies
 
 env:
   LOG_LEVEL: debug
   # renovate: datasource=docker depName=renovate packageName=ghcr.io/renovatebot/renovate
   RENOVATE_VERSION: 44.31.0-full
+  # Renovate's `minimumReleaseAge` does not apply to `lockFileMaintenance`, because
+  # Renovate delegates the resolution to the package manager and never looks up a
+  # release timestamp. Have npm apply the same age gate itself, so lock file refreshes
+  # cannot pull in a package published minutes ago.
+  # https://docs.npmjs.com/cli/v11/using-npm/config#min-release-age
+  NPM_CONFIG_MIN_RELEASE_AGE: "3"
   RENOVATE_DRY_RUN: ""
   RENOVATE_ONBOARDING: "false"
   RENOVATE_REQUIRE_CONFIG: "optional"
   RENOVATE_PRINT_CONFIG: ${{ inputs.dry_run }}
   RENOVATE_AUTODISCOVER: "true"
 
+# https://docs.github.com/en/actions/using-jobs/using-concurrency
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment || 'default' }}-${{ github.ref }}
+  # Expressions in the concurrency context do not have access
+  # to the entire github.event context so we cannot make advanced
+  # expressions beyond a few top level github event properties.
+
+  # See: https://github.com/orgs/community/discussions/69704#discussioncomment-7803351
+
+  # Cancel jobs in-progress for dry-runs or open PRs
+  cancel-in-progress: ${{ inputs.dry_run }}
+
 jobs:
   renovate:
     runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    environment:
+      name: ${{ inputs.environment }}
+
     steps:
       # https://github.com/actions/checkout
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Decode the GitHub App Private Key
+      # https://github.com/product-os/decode-private-key
+      - name: Decode private key
         id: decode
-        shell: bash
-        working-directory: ${{ runner.temp }}
-        # Skip decode if -----BEGIN is detected in the body of the private key, which indicates that the key is not base64 encoded.
-        # This allows users to use either raw or base64 encoded keys without needing to specify which format they are using.
-        # Raw secrets are automatically masked by GitHub; the base64-decoded derivative is not, so we mask it explicitly.
-        env:
-          SECRET_VALUE: ${{ secrets.RENOVATE_APP_PRIVATE_KEY || secrets.PRIVATE_KEY }}
-        run: |
-          set -euo pipefail
-          if [[ -z "$SECRET_VALUE" ]]; then
-            echo "::error::RENOVATE_APP_PRIVATE_KEY secret is not set"
-            exit 1
-          fi
-          if [[ "$SECRET_VALUE" == *"-----BEGIN"* ]]; then
-            echo "Detected unencoded private key, skipping base64 decode"
-            private_key="$SECRET_VALUE"
-          else
-            if ! private_key=$(echo "$SECRET_VALUE" | base64 -d); then
-              echo "::error::Failed to base64 decode RENOVATE_APP_PRIVATE_KEY. Verify the secret is valid base64."
-              exit 1
-            fi
-            while IFS= read -r line; do
-              [[ -n "$line" ]] && echo "::add-mask::$line"
-            done <<< "$private_key"
-          fi
-          if [[ "$private_key" != *"-----BEGIN"* ]]; then
-            echo "::error::Decoded private key does not look like a PEM key (missing -----BEGIN header). Check secret encoding."
-            exit 1
-          fi
-          # Random delimiter prevents injection via crafted secret values
-          delimiter="pk_$(head -c 16 /dev/urandom | od -An -tx1 | tr -d ' \n')"
-          {
-            echo "private-key<<${delimiter}"
-            echo "$private_key"
-            echo "${delimiter}"
-          } >> "$GITHUB_OUTPUT"
+        uses: product-os/decode-private-key@e51369845773d30f258072c37a0086b3b46c0b4f # v0.0.2
+        with:
+          secret: ${{ secrets.RENOVATE_APP_PRIVATE_KEY || secrets.PRIVATE_KEY }}
 
       # https://github.com/actions/create-github-app-token
       - name: Generate GitHub App installation token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: app-token
+        id: app_token
         with:
+          # https://github.com/apps/balena-renovate
+          # https://github.com/organizations/product-os/settings/apps/balena-renovate
           client-id: ${{ vars.RENOVATE_APP_ID || vars.APP_ID }}
           private-key: ${{ steps.decode.outputs.private-key }}
           owner: ${{ github.repository_owner }}
 
       - name: Enable dry-run
         run: echo "RENOVATE_DRY_RUN=full" >> "${GITHUB_ENV}"
-        if: inputs.dry_run || github.event_name == 'pull_request'
+        if: inputs.dry_run
+
+      - name: Forward repositories input to Renovate env
+        if: inputs.repositories != ''
+        env:
+          REPOS: ${{ inputs.repositories }}
+        run: echo "RENOVATE_REPOSITORIES=${REPOS}" >> "${GITHUB_ENV}"
 
       # https://github.com/renovatebot/github-action
       - uses: renovatebot/github-action@e09d604f8f803bb527bd8321ed5be06c460b8682 # v46.2.2
         with:
+          # https://docs.renovatebot.com/configuration-options
           # https://docs.renovatebot.com/self-hosted-configuration
-          configurationFile: default.json
-          token: ${{ steps.app-token.outputs.token }}
+          configurationFile: ${{ inputs.config_file || 'default.json' }}
+          token: ${{ steps.app_token.outputs.token }}
           renovate-version: ${{ env.RENOVATE_VERSION }}
+          # https://github.com/renovatebot/github-action?tab=readme-ov-file#env-regex
+          env-regex: "^(?:RENOVATE_\\w+|LOG_LEVEL|AWS_\\w+|NPM_CONFIG_MIN_RELEASE_AGE)$"
         env:
           RENOVATE_DRY_RUN: ${{ env.RENOVATE_DRY_RUN }}
+          # Install tools at runtime so `constraints` are honored. This is also how
+          # the npm version is pinned: `constraints.npm` in the shared config, rather
+          # than installing npm globally from a custom container entrypoint.
+          # https://docs.renovatebot.com/self-hosted-configuration/#self-hosted-configuration-options
+          # https://docs.renovatebot.com/self-hosted-configuration/#binarysource
+          RENOVATE_BINARY_SOURCE: install
