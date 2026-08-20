@@ -1,0 +1,44 @@
+name: Renovate Dry-Run
+on:
+  schedule:
+    # Runs every 30 minutes
+    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: "*/30 * * * *"
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: true
+        description: "If true, the Renovate will not make any changes to the repository."
+        required: false
+      environment:
+        type: string
+        required: false
+        description: "The environment to run Renovate for."
+      config_file:
+        type: string
+        required: true
+        description: "The config file to use for Renovate."
+      repositories:
+        type: string
+        required: false
+        description: "Comma-separated repos for Renovate to process. Leave empty to use the config file's repositories."
+
+permissions:
+  contents: read
+  packages: read   # Manage private ghcr.io dependencies
+
+jobs:
+  renovate:
+
+    uses: ./.github/workflows/renovate.yml
+    secrets: inherit
+    with:
+      config_file: ${{ inputs.config_file || 'default.json' }}
+      dry_run: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
+      repositories: ${{ inputs.repositories || '' }}
+      environment: ${{ inputs.environment || '' }}
