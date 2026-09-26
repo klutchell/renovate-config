@@ -98,7 +98,7 @@ jobs:
         run: echo "RENOVATE_REPOSITORIES=${REPOS}" >> "${GITHUB_ENV}"
 
       # https://github.com/renovatebot/github-action
-      - uses: renovatebot/github-action@e26264186543fd355dc60776e21f7fbb67ce6f85 # v46.3.2
+      - uses: renovatebot/github-action@f3a31a786096ba6b40d0f0ffe11a494ef73bfa7c # v46.3.4
         with:
           # https://docs.renovatebot.com/configuration-options
           # https://docs.renovatebot.com/self-hosted-configuration
