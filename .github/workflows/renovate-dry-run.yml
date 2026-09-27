@@ -38,7 +38,11 @@ jobs:
     uses: ./.github/workflows/renovate.yml
     secrets: inherit
     with:
-      config_file: ${{ inputs.config_file || 'default.json' }}
+      # Scheduled runs load default.json as a preset, so its own rules resolve after its
+      # extends and can override them. A pull request runs its own default.json as the
+      # global config instead, where its rules resolve before its extends, so a rule
+      # that overrides a preset can behave differently in the dry run.
+      config_file: ${{ inputs.config_file || (github.event_name == 'pull_request' && 'default.json' || '.github/renovate/global.json') }}
       dry_run: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
       repositories: ${{ inputs.repositories || '' }}
       environment: ${{ inputs.environment || '' }}
