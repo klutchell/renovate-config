@@ -1,15 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
     "config:best-practices",
     ":semanticCommitsDisabled",
     ":automergeStableNonMajor",
     ":automergePatch",
     ":automergeDigest",
-    "regexManagers:dockerfileVersions",
-    "regexManagers:githubActionsVersions",
-    "regexManagers:tfvarsVersions",
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
+    "customManagers:tfvarsVersions",
     "group:allDigest"
   ],
   "timezone": "America/New_York",
@@ -21,15 +20,13 @@
   "pinDigest": {
     "automerge": true
   },
-  "allowPostUpgradeCommandTemplating": true,
-  "allowedPostUpgradeCommands": [
+  "allowedCommands": [
     "^sed"
   ],
   "prHourlyLimit": 0,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": ["renovate"],
-  "printConfig": true,
   "pre-commit": {
     "enabled": true
   },
@@ -80,7 +77,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)balena\\.ya?ml$"],
+      "managerFilePatterns": ["/(^|/)balena\\.ya?ml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s+version:\\s*[\"']?(?<currentVersion>.+?)[\"']?\\s"
       ],
@@ -89,9 +86,9 @@
     {
       "description": "balenaCloud registry image reference manager",
       "customType": "regex",
-      "fileMatch": [
-        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
-        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
+      "managerFilePatterns": [
+        "/(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$/",
+        "/(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$/"
       ],
       "matchStrings": [
         "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)((/|:)(?<currentDigest>[^:/\\s]+))?((/|:)(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+(\\-rev[1-9]+)?))?"
