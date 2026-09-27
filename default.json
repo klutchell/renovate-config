@@ -68,6 +68,12 @@
       "minimumReleaseAge": null
     },
     {
+      "description": "Hold the Renovate image when its release has no timestamp. A failed Docker Hub lookup falls back to registry tags without timestamps, and a broken Renovate release stops the run that would open the fix PR.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["renovate/renovate"],
+      "minimumReleaseAgeBehaviour": "timestamp-required"
+    },
+    {
       "description": "The regex managers in this preset capture no digest, so a pinDigest update cannot apply and fails on every run. The rule covers every regex manager on purpose, including those in repos that extend this preset. A repo whose regex manager does capture a digest must set pinDigests again.",
       "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
