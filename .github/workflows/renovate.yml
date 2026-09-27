@@ -27,12 +27,16 @@ permissions:
 
 env:
   LOG_LEVEL: debug
-  # renovate: datasource=docker depName=renovate packageName=ghcr.io/renovatebot/renovate
-  RENOVATE_VERSION: 44.115.12-full
+  # The action pulls this tag from ghcr.io, but Renovate looks it up on Docker Hub.
+  # Only Docker Hub gives release timestamps, which `minimumReleaseAge` needs.
+  # https://docs.renovatebot.com/modules/datasource/docker/
+  # renovate: datasource=docker depName=renovate packageName=renovate/renovate
+  RENOVATE_VERSION: 44.115.12
   # Renovate's `minimumReleaseAge` does not apply to `lockFileMaintenance`, because
   # Renovate delegates the resolution to the package manager and never looks up a
   # release timestamp. Have npm apply the same age gate itself, so lock file refreshes
-  # cannot pull in a package published minutes ago.
+  # cannot pull in a package published minutes ago. Keep the value in days equal to
+  # `minimumReleaseAge` in default.json.
   # https://docs.npmjs.com/cli/v11/using-npm/config#min-release-age
   NPM_CONFIG_MIN_RELEASE_AGE: "3"
   RENOVATE_DRY_RUN: ""
@@ -56,7 +60,7 @@ concurrency:
 
 jobs:
   renovate:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 90
 
     environment:
@@ -109,9 +113,8 @@ jobs:
           env-regex: "^(?:RENOVATE_\\w+|LOG_LEVEL|AWS_\\w+|NPM_CONFIG_MIN_RELEASE_AGE)$"
         env:
           RENOVATE_DRY_RUN: ${{ env.RENOVATE_DRY_RUN }}
-          # Install tools at runtime so `constraints` are honored. This is also how
-          # the npm version is pinned: `constraints.npm` in the shared config, rather
-          # than installing npm globally from a custom container entrypoint.
-          # https://docs.renovatebot.com/self-hosted-configuration/#self-hosted-configuration-options
+          # The slim image ships no tools. Renovate installs each tool at runtime, in the
+          # version that the repo's own constraints select.
+          # https://docs.renovatebot.com/configuration-options/#constraints
           # https://docs.renovatebot.com/self-hosted-configuration/#binarysource
           RENOVATE_BINARY_SOURCE: install

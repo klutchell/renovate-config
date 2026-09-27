@@ -1,34 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
     "config:best-practices",
     ":semanticCommitsDisabled",
     ":automergeStableNonMajor",
     ":automergePatch",
     ":automergeDigest",
-    "regexManagers:dockerfileVersions",
-    "regexManagers:githubActionsVersions",
-    "regexManagers:tfvarsVersions",
-    "group:allDigest",
-    "schedule:weekends"
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
+    "customManagers:tfvarsVersions",
+    "group:allDigest"
   ],
   "timezone": "America/New_York",
+  "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "digest": {
     "automerge": true
   },
   "pinDigest": {
     "automerge": true
   },
-  "allowPostUpgradeCommandTemplating": true,
-  "allowedPostUpgradeCommands": [
+  "allowedCommands": [
     "^sed"
   ],
   "prHourlyLimit": 0,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
   "labels": ["renovate"],
-  "printConfig": true,
   "pre-commit": {
     "enabled": true
   },
@@ -58,16 +56,34 @@
       "enabled": false
     },
     {
-      "description": "Schedule pre-commit updates to 1h per week for noise reduction",
+      "description": "Schedule pre-commit updates to a 4h window per week for noise reduction. The window spans several hourly runs, so one late or dropped run does not skip the week.",
       "matchManagers": ["pre-commit"],
       "prPriority": -1,
-      "schedule": ["* 0 * * 0"]
+      "schedule": ["* 0-3 * * 0"]
+    },
+    {
+      "description": "Docker Hub gives a digest the tag_last_pushed time of its tag. A floating tag that is pushed more often than minimumReleaseAge would never get its digest update.",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Hold the Renovate image when its release has no timestamp. A failed Docker Hub lookup falls back to registry tags without timestamps, and a broken Renovate release stops the run that would open the fix PR.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["renovate/renovate"],
+      "minimumReleaseAgeBehaviour": "timestamp-required"
+    },
+    {
+      "description": "The regex managers in this preset capture no digest, so a pinDigest update cannot apply and fails on every run. The rule covers every regex manager on purpose, including those in repos that extend this preset. A repo whose regex manager does capture a digest must set pinDigests again.",
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "pinDigests": false
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)balena\\.ya?ml$"],
+      "managerFilePatterns": ["/(^|/)balena\\.ya?ml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (?:packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s+version:\\s*[\"']?(?<currentVersion>.+?)[\"']?\\s"
       ],
@@ -76,9 +92,9 @@
     {
       "description": "balenaCloud registry image reference manager",
       "customType": "regex",
-      "fileMatch": [
-        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
-        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$"
+      "managerFilePatterns": [
+        "/(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$/",
+        "/(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$/"
       ],
       "matchStrings": [
         "FROM bh\\.cr/(?<depName>[\\w\\-]+/[\\w\\-]+)((/|:)(?<currentDigest>[^:/\\s]+))?((/|:)(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+(\\-rev[1-9]+)?))?"
