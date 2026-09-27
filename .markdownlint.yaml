@@ -1,0 +1,3 @@
+# Code blocks carry image references that cannot wrap. Prose keeps the 80 column limit.
+MD013:
+  code_blocks: false
