@@ -69,6 +69,12 @@
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["digest", "pinDigest"],
       "minimumReleaseAge": null
+    },
+    {
+      "description": "The regex managers in this preset capture no digest, so a pinDigest update cannot apply and fails on every run. The rule covers every regex manager on purpose, including those in repos that extend this preset. A repo whose regex manager does capture a digest must set pinDigests again.",
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "pinDigests": false
     }
   ],
   "customManagers": [
