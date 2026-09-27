@@ -15,7 +15,7 @@ repos:
     rev: 44.115.10
     hooks:
     -   id: renovate-config-validator
-        files: '(^|/).?default(?:rc)?(?:\.json5?)?$'
+        files: '(^|/).?default(?:rc)?(?:\.json5?)?$|^\.github/renovate/global\.json$'
 
 -   repo: https://github.com/rhysd/actionlint
     rev: v1.7.12

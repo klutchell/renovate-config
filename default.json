@@ -20,9 +20,6 @@
   "pinDigest": {
     "automerge": true
   },
-  "allowedCommands": [
-    "^sed"
-  ],
   "prHourlyLimit": 0,
   "rebaseWhen": "behind-base-branch",
   "automerge": false,
