@@ -10,10 +10,11 @@
     "regexManagers:dockerfileVersions",
     "regexManagers:githubActionsVersions",
     "regexManagers:tfvarsVersions",
-    "group:allDigest",
-    "schedule:weekends"
+    "group:allDigest"
   ],
   "timezone": "America/New_York",
+  "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "digest": {
     "automerge": true
   },
@@ -62,6 +63,12 @@
       "matchManagers": ["pre-commit"],
       "prPriority": -1,
       "schedule": ["* 0 * * 0"]
+    },
+    {
+      "description": "Docker Hub gives a digest the tag_last_pushed time of its tag. A floating tag that is pushed more often than minimumReleaseAge would never get its digest update.",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "minimumReleaseAge": null
     }
   ],
   "customManagers": [

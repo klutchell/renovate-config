@@ -32,7 +32,8 @@ env:
   # Renovate's `minimumReleaseAge` does not apply to `lockFileMaintenance`, because
   # Renovate delegates the resolution to the package manager and never looks up a
   # release timestamp. Have npm apply the same age gate itself, so lock file refreshes
-  # cannot pull in a package published minutes ago.
+  # cannot pull in a package published minutes ago. Keep the value in days equal to
+  # `minimumReleaseAge` in default.json.
   # https://docs.npmjs.com/cli/v11/using-npm/config#min-release-age
   NPM_CONFIG_MIN_RELEASE_AGE: "3"
   RENOVATE_DRY_RUN: ""
