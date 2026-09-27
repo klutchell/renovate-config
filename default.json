@@ -59,10 +59,10 @@
       "enabled": false
     },
     {
-      "description": "Schedule pre-commit updates to 1h per week for noise reduction",
+      "description": "Schedule pre-commit updates to a 4h window per week for noise reduction. The window spans several hourly runs, so one late or dropped run does not skip the week.",
       "matchManagers": ["pre-commit"],
       "prPriority": -1,
-      "schedule": ["* 0 * * 0"]
+      "schedule": ["* 0-3 * * 0"]
     },
     {
       "description": "Docker Hub gives a digest the tag_last_pushed time of its tag. A floating tag that is pushed more often than minimumReleaseAge would never get its digest update.",

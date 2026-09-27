@@ -1,9 +1,9 @@
 name: Renovate Dry-Run
 on:
   schedule:
-    # Runs every 30 minutes
+    # Runs hourly, off the busy top of the hour
     # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    - cron: "*/30 * * * *"
+    - cron: "17 * * * *"
   pull_request:
     branches:
       - master
