@@ -75,6 +75,13 @@
       "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "pinDigests": false
+    },
+    {
+      "description": "Keep reusable workflows from this repo on @main. A pinned digest would change on every merge here, and each digest PR in a balena app repo deploys a new +rev release.",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["workflow"],
+      "matchPackageNames": ["klutchell/renovate-config"],
+      "pinDigests": false
     }
   ],
   "customManagers": [
