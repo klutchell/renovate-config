@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  # Other repos call this workflow, so the hook job is defined once.
+  # A caller checks out and lints its own repository.
+  workflow_call:
 
 permissions:
   contents: read
