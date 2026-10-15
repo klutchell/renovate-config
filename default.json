@@ -73,7 +73,7 @@
       "minimumReleaseAgeBehaviour": "timestamp-required"
     },
     {
-      "description": "The regex managers in this preset capture no digest, so a pinDigest update cannot apply and fails on every run. The rule covers every regex manager on purpose, including those in repos that extend this preset. A repo whose regex manager does capture a digest must set pinDigests again.",
+      "description": "Most regex managers in this preset capture no digest, so a pinDigest update cannot apply and fails on every run. The pre-commit entry manager matches only digest-pinned images, so the rule does not affect it. The rule covers every regex manager on purpose, including those in repos that extend this preset. A repo whose regex manager does capture a digest must set pinDigests again.",
       "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "pinDigests": false
@@ -111,6 +111,15 @@
       "currentValueTemplate": "{{#if currentValue}}{{currentValue}}{{else}}{{#if currentDigest}}{{currentDigest}}{{else}}latest{{/if}}{{/if}}",
       "depNameTemplate": "bh.cr/{{{depName}}}",
       "packageNameTemplate": "{{replace 'bh.cr/' '' depName}}"
+    },
+    {
+      "description": "Docker images pinned in pre-commit hook entries. The pre-commit manager bumps rev only, and an upstream entry such as hadolint-docker is untagged.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.pre-commit-config\\.yaml$/"],
+      "matchStrings": [
+        "entry:\\s+(?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "customDatasources": {
