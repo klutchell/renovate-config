@@ -4,6 +4,17 @@ Shared renovate configuration and GitHub Action
 
 ## Custom Managers
 
+### pre-commit entry images
+
+The pre-commit manager bumps `rev` only. This manager bumps a Docker image
+that a hook pins in its `entry:` override. The image needs both a tag and a
+digest:
+
+```yaml
+-   id: hadolint-docker
+    entry: ghcr.io/hadolint/hadolint:v2.15.1@sha256:32dac94127fd60b7b7e3fbfc65e1383b9b5e25c9bfd7b8536de7a539fe68a12d hadolint
+```
+
 ### balena-cloud
 
 This is a customer manager & datasource to query the balenaCloud application releases
